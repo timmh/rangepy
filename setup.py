@@ -29,6 +29,7 @@ setup(
         "requests>=2.25.0",
         "shapely>=1.8.0",
         "pandas>=1.3.0",
+        "pooch>=1.8.2",
     ],
     extras_require={
         "dev": [

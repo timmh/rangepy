@@ -39,57 +39,58 @@ def main():
         "White-tailed deer",
     ]
 
-    for species in species_examples:
-        print(f"\nTrying to get range for: {species}")
-        
-        # Search for the species first
-        search_results = rangepy.search_species(species)
-        print(f"Search results: {len(search_results)} found")
-        
-        # Get the range map
-        try:
-            range_df = rangepy.get_species_range(species)
-            if range_df is not None:
-                print(f"Successfully retrieved range data!")
-                print(f"DataFrame shape: {range_df.shape}")
-                print(f"Columns: {list(range_df.columns)}")
-                print(f"CRS: {range_df.crs}")
-                print("Sample data:")
-                print(range_df.head())
-                # Plot the range map
-                try:
-                    import os
-                    import matplotlib.pyplot as plt
-                    import contextily as ctx
+    for admin_level in [None, "admin1", "admin0"]:
+        for species in species_examples:
+            print(f"\nTrying to get range for: {species}")
+            
+            # Search for the species first
+            search_results = rangepy.search_species(species)
+            print(f"Search results: {len(search_results)} found")
+            
+            # Get the range map
+            try:
+                range_df = rangepy.get_species_range(species, admin_level="admin1")
+                if range_df is not None:
+                    print(f"Successfully retrieved range data!")
+                    print(f"DataFrame shape: {range_df.shape}")
+                    print(f"Columns: {list(range_df.columns)}")
+                    print(f"CRS: {range_df.crs}")
+                    print("Sample data:")
+                    print(range_df.head())
+                    # Plot the range map
+                    try:
+                        import os
+                        import matplotlib.pyplot as plt
+                        import contextily as ctx
 
-                    # Create a plot
-                    fig, ax = plt.subplots(figsize=(10, 10))
+                        # Create a plot
+                        fig, ax = plt.subplots(figsize=(10, 10))
 
-                    # Plot the species range, reprojecting to Web Mercator (EPSG:3857) for the basemap
-                    range_df.to_crs(epsg=3857).plot(ax=ax, alpha=0.5, edgecolor='k', facecolor='red')
+                        # Plot the species range, reprojecting to Web Mercator (EPSG:3857) for the basemap
+                        range_df.to_crs(epsg=3857).plot(ax=ax, alpha=0.5, edgecolor='k', facecolor='red')
 
-                    # Add a basemap from contextily
-                    ctx.add_basemap(ax, source=ctx.providers.OpenStreetMap.Mapnik)
+                        # Add a basemap from contextily
+                        ctx.add_basemap(ax, source=ctx.providers.OpenStreetMap.Mapnik)
 
-                    # Customize and show the plot
-                    ax.set_title(f"Range Map for {species}")
-                    ax.set_axis_off()
-                    plt.tight_layout()
-                    os.makedirs("figures", exist_ok=True)
-                    plt.savefig(f"figures/{species.replace(' ', '_')}_range_map.png", bbox_inches='tight', dpi=300)
-                    plt.show()
-                    plt.close()
+                        # Customize and show the plot
+                        ax.set_title(f"Range Map for {species}")
+                        ax.set_axis_off()
+                        plt.tight_layout()
+                        os.makedirs("figures", exist_ok=True)
+                        plt.savefig(f"figures/{species.replace(' ', '_')}_{str(admin_level)}_range_map.png", bbox_inches='tight', dpi=300)
+                        plt.show()
+                        plt.close()
 
-                except ImportError:
-                    print("\nPlotting libraries not found. Please install matplotlib and contextily to see the map.")
-                except Exception as plot_error:
-                    print(f"\nAn error occurred during plotting: {plot_error}")
-            else:
-                print("No range data found")
-        except Exception as e:
-            print(f"Error retrieving range: {e}")
-        
-        print("-" * 30)
+                    except ImportError:
+                        print("\nPlotting libraries not found. Please install matplotlib and contextily to see the map.")
+                    except Exception as plot_error:
+                        print(f"\nAn error occurred during plotting: {plot_error}")
+                else:
+                    print("No range data found")
+            except Exception as e:
+                print(f"Error retrieving range: {e}")
+            
+            print("-" * 30)
 
 if __name__ == "__main__":
     main()
