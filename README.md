@@ -1,18 +1,12 @@
 # RangePy
 
-A minimal Python library for retrieving species range maps as GeoPandas dataframes. For now, this library is limited to the Contiguous United States.
+A minimal Python library for retrieving species range maps as GeoPandas dataframes. For now, this library is limited to the Contiguous United States and species range maps from the USGS (see [Data Sources](#data-sources) for details).
 
 ## Installation
 
 ```bash
-pip install -e .
+pip install git+https://github.com/timmh/rangepy.git
 ```
-
-## Requirements
-
-- geopandas
-- sciencebasepy
-- requests
 
 ## Usage
 
@@ -31,8 +25,8 @@ print(range_df.head())
 ## Data Sources
 
 Currently supports:
-- USGS ScienceBase species range maps via ScienceBase API
+- [USGS ScienceBase species range maps via ScienceBase API](https://www.sciencebase.gov/catalog/item/5951527de4b062508e3b1e79)
 
 ## License
 
-MIT License
+This project is licensed under the MIT License - see the LICENSE file for details.
